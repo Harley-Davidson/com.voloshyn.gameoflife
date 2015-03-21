@@ -4,27 +4,32 @@ package objects;
  * Created by Max on 18.03.2015.
  */
 public class Cell {
-    public final int column;
-    public final int row;
+    public enum State{
+        ALIVE, DEAD, BLANK
+    }
+    private State state;
 
-    public int amountOfNeighbours;
-
-    public Cell(int column, int row, int amountOfNeighbours) {
-        this.column = column;
-        this.row = row;
-        this.amountOfNeighbours = 0;
+    public Cell() {
+        this.state = State.BLANK;
     }
 
-    @Override
-    public String toString() {
-        return "Cell{" +
-                "column=" + column +
-                ", row=" + row +
-                ", amountOfNeighbours=" + amountOfNeighbours +
-                '}';
+    public State getState() {
+        return state;
     }
 
-    public boolean equals(Cell cell){
-        return row == cell.row && column == cell.column;
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public boolean isAlive(){
+        return state == State.ALIVE;
+    }
+
+    public boolean isDead(){
+        return state == State.DEAD;
+    }
+
+    public boolean isBlank(){
+        return state == State.BLANK;
     }
 }
