@@ -13,7 +13,7 @@ public class Grid {
         this.gridY = gridY;
         grid = new Cell[gridX][gridY];
         for (int j = 0; j < gridY; j++) {
-            for (int i = 0; i <gridX; i++) {
+            for (int i = 0; i < gridX; i++) {
                 grid[i][j] = new Cell();
 //                System.out.print("*");
             }
@@ -21,7 +21,29 @@ public class Grid {
         }
     }
 
-    public void clearGrid(){
+
+    public void printGrid() {
+        Cell.State state;
+        for (int j = 0; j < gridY; j++) {
+            for (int i = 0; i < gridX; i++) {
+                state = grid[i][j].getState();
+                switch (state) {
+                    case ALIVE:
+                        System.out.print("0");
+                        break;
+                    case DEAD:
+                        System.out.print("*");
+                        break;
+                    case BLANK:
+                        System.out.print(".");
+                        break;
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public void clearGrid() {
         for (int i = 0; i < gridX; i++) {
             for (int j = 0; j < gridY; j++) {
                 grid[i][j].isBlank();
@@ -29,14 +51,14 @@ public class Grid {
         }
     }
 
-    public Grid randomlyFillGrid(){
+    public Grid randomlyFillGrid() {
         int state;
         for (int j = 0; j < gridY; j++) {
             for (int i = 0; i < gridX; i++) {
-                state = 1 + (int)(Math.random() * 3);
-                switch (state){
+                state = 1 + (int) (Math.random() * 3);
+                switch (state) {
                     case 1:
-                        grid[i][j].setState(Cell.State.BLANK);
+                        grid[i][j].setState(Cell.State.DEAD);
                         System.out.print(".");
                         break;
                     case 2:

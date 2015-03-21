@@ -13,6 +13,10 @@ public class Cell {
         this.state = State.BLANK;
     }
 
+    public Cell(State state) {
+        this.state = state;
+    }
+
     public State getState() {
         return state;
     }

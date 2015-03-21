@@ -12,8 +12,8 @@ import static javafx.scene.paint.Color.*;
  * Created by Max on 21.03.2015.
  */
 public class GridDisplay {
-    private static final double ELEMENT_SIZE = 15;
-    private static final double GAP = ELEMENT_SIZE / 10;
+    public static final double ELEMENT_SIZE = 15;
+    public static final double GAP = ELEMENT_SIZE / 10;
     private int yLength;
     private int xLength;
     private Grid generation;
@@ -28,19 +28,23 @@ public class GridDisplay {
 
 
 
-    public GridDisplay(TilePane tile, int xLength, int yLength) {
+    public GridDisplay(TilePane tile, int xLength, int yLength, Grid generation) {
         this.tilePane = tile;
         this.xLength = xLength;
         this.yLength = yLength;
-        generation = new Grid(xLength, yLength);
-//        this.generation = generation;
-        generation.randomlyFillGrid();
+        this.generation = generation;
         tilePane.setStyle("-fx-background-color: rgba(255, 215, 200, 0.1);");
         tilePane.setHgap(GAP);
         tilePane.setVgap(GAP);
         setXLength(xLength);
         setYLength(yLength);
-        System.out.println("rows:" + yLength + "cols:" + xLength);
+        System.out.println("GridDisplay cols:" + xLength + "  GridDisplay rows:" + yLength);
+    }
+
+    public void redrawGridDisplay(Grid generation){
+        this.generation = generation;
+        setXLength(xLength);
+        setYLength(yLength);
     }
 
     public void setXLength(int columns) {
@@ -55,14 +59,10 @@ public class GridDisplay {
         createElements();
     }
 
-//    public Group getDisplay() {
-//        return display;
-//    }
-
     private void createElements() {
         tilePane.getChildren().clear();
-        for (int i = 0; i < xLength; i++) {
-            for (int j = 0; j < yLength; j++) {
+        for (int j = 0; j < yLength; j++) {
+            for (int i = 0; i < xLength; i++) {
                 tilePane.getChildren().add(createElement(i, j));
             }
         }
@@ -75,36 +75,19 @@ public class GridDisplay {
         switch (state){
             case ALIVE:
                 rectangle.setFill(GREEN);
-                System.out.println("1");
+//                System.out.println("1");
                 break;
             case DEAD:
-                rectangle.setFill(GRAY);
-                System.out.println("2");
+                rectangle.setFill(LIGHTGRAY);
+//                System.out.println("2");
                 break;
             case BLANK:
-                rectangle.setFill(WHITESMOKE);
-                System.out.println("pipi");
+                rectangle.setFill(WHITE);
+//                System.out.println("pipi");
                 break;
         }
 
         return rectangle;
     }
-
-//    public Rectangle getCellRectangle(int row, int col){
-//        Rectangle rectangle = new Rectangle(10, 10, BLACK);
-//        Cell.State state = currentGeneration.getCell(row, col).getState();
-//        switch (state){
-//            case ALIVE:
-//                rectangle.setFill(GREEN);
-//                break;
-//            case DEAD:
-//                rectangle.setFill(GRAY);
-//                break;
-//            case BLANK:
-//                rectangle.setFill(WHITE);
-//                break;
-//        }
-//        return rectangle;
-//    }
 
 }

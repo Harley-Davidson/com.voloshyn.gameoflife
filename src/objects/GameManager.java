@@ -6,30 +6,58 @@ import gui.controllers.Controller;
  * Created by Max on 20.03.2015.
  */
 public class GameManager {
-    private static int gridX = Controller.gameGridWidth;
-    private int gridY = Controller.gameGridHeight;
-    private Grid currentGeneration = new Grid(gridX, gridY);
-    private Grid newGeneration  = new Grid(gridX, gridY);
-    private int generationCounter = 1;
+    private int gridX;
+    private int gridY;
+    private Grid currentGeneration;
+    private Grid newGeneration;
+    private int generationCounter;
 
-    public void bornNewGeneration(){
+    public GameManager() {
+        gridX = Controller.cols - 1;
+        gridY = Controller.rows - 1;
+        currentGeneration = new Grid(Controller.cols, Controller.rows);
+        fillShape();
+        newGeneration  = new Grid(Controller.cols, Controller.rows);
+        generationCounter = 1;
+//        currentGeneration.randomlyFillGrid();
+        currentGeneration.printGrid();
+    }
+
+
+
+
+
+    public Grid bornNewGeneration(){
+        newGeneration = new Grid(Controller.cols, Controller.rows);
+        int amountOfAliveNeighbours;
         //calculation of surrounding dead/alive neighbours (not on the edge of the grid)
-        for (int j = 1; j < gridY - 1; j++){
-            for (int i = 1; i < gridX - 1; i++) {
+        for (int j = 0; j < gridY; j++){
+            for (int i = 0; i < gridX; i++) {
+                amountOfAliveNeighbours = amountOfAliveNeighbours(i, j);
                 if (currentGeneration.getCell(i, j).isAlive()) {
                     //under-population or overcrowding
-                    if (amountOfAliveNeighbours(i, j) < 2 || amountOfAliveNeighbours(i, j) > 3) newGeneration.getCell(i, j).setState(Cell.State.DEAD);
-                        //keeping beeing alive
+                    if (amountOfAliveNeighbours < 2 || amountOfAliveNeighbours > 3) newGeneration.getCell(i, j).setState(Cell.State.DEAD);
+                    //keeping being alive
                     else newGeneration.getCell(i, j).setState(Cell.State.ALIVE);
                 }
                 if (currentGeneration.getCell(i, j).isDead()) {
                     //reproduction
-                    if (amountOfAliveNeighbours(i, j) == 3) newGeneration.getCell(i, j).setState(Cell.State.ALIVE);
+                    if (amountOfAliveNeighbours == 3) newGeneration.getCell(i, j).setState(Cell.State.ALIVE);
+                    else newGeneration.getCell(i, j).setState(Cell.State.DEAD);
                 }
+                if (currentGeneration.getCell(i, j).isBlank()) {
+                    //reproduction
+                    if (amountOfAliveNeighbours == 3) newGeneration.getCell(i, j).setState(Cell.State.ALIVE);
+                    else newGeneration.getCell(i, j).setState(Cell.State.BLANK);
+                }
+//                System.out.println("row: " + j + ", col : " + i + ", lifeNeighb : " + amountOfAliveNeighbours + ", CellState : " + currentGeneration.getCell(i, j).getState());
             }
         }
         generationCounter++;
         currentGeneration = newGeneration;
+
+
+        return currentGeneration;
     }
 
     private int amountOfAliveNeighbours(int x, int y){
@@ -38,9 +66,9 @@ public class GameManager {
         int leftX = x - 1;
         int centralX = x;
         int rightX = x + 1;
-        int topY = y + 1;
+        int topY = y - 1;
         int centralY = y;
-        int bottomY = y - 1;
+        int bottomY = y + 1;
 
         if (x == 0 && y > 0 && y < gridY){
             leftX = gridX;
@@ -71,15 +99,47 @@ public class GameManager {
             bottomY = 0;
         }
 
-        if (currentGeneration.getCell(leftX, topY).isAlive()) amountOfAliveNeighbours++;
-        if (currentGeneration.getCell(leftX, centralY).isAlive()) amountOfAliveNeighbours++;
-        if (currentGeneration.getCell(leftX, bottomY).isAlive()) amountOfAliveNeighbours++;
-        if (currentGeneration.getCell(centralX, topY).isAlive()) amountOfAliveNeighbours++;
+        if (currentGeneration.getCell(leftX, topY).isAlive()) {
+            amountOfAliveNeighbours++;
+//            System.out.print("   " + leftX + " " + topY + " is Alive  &");
+        }
+//        else System.out.print("   " + leftX + " " + topY + " is Dead  &");
 
-        if (currentGeneration.getCell(centralX, bottomY).isAlive()) amountOfAliveNeighbours++;
-        if (currentGeneration.getCell(rightX, topY).isAlive()) amountOfAliveNeighbours++;
-        if (currentGeneration.getCell(rightX, centralY).isAlive()) amountOfAliveNeighbours++;
-        if (currentGeneration.getCell(rightX, bottomY).isAlive()) amountOfAliveNeighbours++;
+        if (currentGeneration.getCell(leftX, centralY).isAlive()){ amountOfAliveNeighbours++;
+//        System.out.print("   " + leftX + " " + centralY + " is Alive  &");
+    }
+//    else System.out.print("   " + leftX + " " + centralY + " is Dead  &");
+
+        if (currentGeneration.getCell(leftX, bottomY).isAlive()) {amountOfAliveNeighbours++;
+//            System.out.println("   " + leftX + " " + bottomY + " is Alive  &");
+        }
+//        else System.out.println("   " + leftX + " " + bottomY + " is Dead  &");
+
+        if (currentGeneration.getCell(centralX, topY).isAlive()){ amountOfAliveNeighbours++;
+//            System.out.print("   " + centralX + " " + topY + " is Alive  &");
+        }
+//        else System.out.print("   " + centralX + " " + topY + " is Dead  &");
+
+
+        if (currentGeneration.getCell(centralX, bottomY).isAlive()) {amountOfAliveNeighbours++;
+//            System.out.println("   " + centralX + " " + bottomY + " is Alive  &");
+        }
+//        else System.out.println("   " + centralX + " " + bottomY + " is Dead  &");
+
+        if (currentGeneration.getCell(rightX, topY).isAlive()){ amountOfAliveNeighbours++;
+//            System.out.print("   " + rightX + " " + topY + " is Alive  &");
+        }
+//        else System.out.print("   " + rightX + " " + topY + " is Dead  &");
+
+        if (currentGeneration.getCell(rightX, centralY).isAlive()) {amountOfAliveNeighbours++;
+//            System.out.print("   " + rightX + " " + centralY + " is Alive  &");
+        }
+//        else System.out.print("   " + rightX + " " + centralY + " is Dead  &");
+
+        if (currentGeneration.getCell(rightX, bottomY).isAlive()) {amountOfAliveNeighbours++;
+//            System.out.println("   " + rightX + " " + bottomY + " is Alive  &");
+        }
+//        else System.out.println("   " + rightX + " " + bottomY + " is Dead  &");
 
         return amountOfAliveNeighbours;
     }
@@ -108,7 +168,18 @@ public class GameManager {
         this.currentGeneration = currentGeneration;
     }
 
-    public void randomlyBornGeneration() {
-        currentGeneration.randomlyFillGrid();
+    public void fillShape(){
+        currentGeneration = new Grid(Controller.cols, Controller.rows);
+        for (int i = 0; i <5; i++) {
+            currentGeneration.setCellStateInGrid((gridX/2 - 2), (gridY/2 - 2 + i), Cell.State.ALIVE);
+            currentGeneration.setCellStateInGrid((gridX/2 + 2), (gridY/2 - 2 + i), Cell.State.ALIVE);
+        }
+        currentGeneration.setCellStateInGrid((gridX/2), (gridY/2 - 2), Cell.State.ALIVE);
+        currentGeneration.setCellStateInGrid((gridX/2), (gridY/2 + 2), Cell.State.ALIVE);
+
+//        currentGeneration.setCellStateInGrid(1, 0, Cell.State.ALIVE);
+//        currentGeneration.setCellStateInGrid(1, 1, Cell.State.ALIVE);
+//        currentGeneration.setCellStateInGrid(1, 2, Cell.State.ALIVE);
+//        currentGeneration.setCellStateInGrid(21, 17, Cell.State.ALIVE);
     }
 }
