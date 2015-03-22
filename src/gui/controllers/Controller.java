@@ -1,5 +1,7 @@
 package gui.controllers;
 
+import javafx.animation.AnimationTimer;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -7,11 +9,11 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.TilePane;
-import objects.GameManager;
+import objects.GridManager;
 
 
 //
-public class Controller {
+public class Controller{
     @FXML
     public Button btnNext;
     @FXML
@@ -29,57 +31,52 @@ public class Controller {
     @FXML
     public Button btnStart;
 
-//    public static int gameGridHeight = 500;
+    //    public static int gameGridHeight = 500;
 //    public static int gameGridWidth = 700;
 //    public static volatile int rows = (int) (Controller.gameGridHeight / (GridDisplay.ELEMENT_SIZE + GridDisplay.GAP));
 //    public static volatile int cols = (int) (Controller.gameGridWidth / (GridDisplay.ELEMENT_SIZE + GridDisplay.GAP));
-    public static volatile int rows = 25;
-    public static volatile int cols = 25;
-    private GameManager gameManager;
+    public static volatile int rows = 35;
+    public static volatile int cols = 35;
+    private GridManager gridManager;
     private GridDisplay gridDisplay;
-    private static boolean runLife = false;
+    public static boolean runLife = false;
+    protected static Thread gameThread = null;
+    private AnimationTimer timer;
+    private Timeline timeline;
 
 
     @FXML
     private void initialize() {
 //        initListeners();
-//        setGridGame();
-//        gameManager.bornNewGeneration();
-        gameManager = new GameManager();
-        gridDisplay = new GridDisplay(tileGridGame, cols, rows, gameManager.getCurrentGeneration());
+        gridManager = new GridManager();
+        gridDisplay = new GridDisplay(tileGridGame, cols, rows, gridManager.getCurrentGeneration());
 //        gameManager.getCurrentGeneration().printGrid();
-        System.out.println("Controller cols " + cols + "  Controller rows " + rows);
+//        System.out.println("Controller cols " + cols + "  Controller rows " + rows);
     }
 
+    public void nextGeneration() {
+        gridManager.bornNewGeneration();
+    }
 
-    public void nextGeneration(ActionEvent actionEvent) {
+    public void btnNextGenerate(ActionEvent actionEvent) {
         System.out.println("generated");
-        gridDisplay.redrawGridDisplay(gameManager.bornNewGeneration());
+        nextGeneration();
+        gridDisplay.reDrawGridDisplay(gridManager.getCurrentGeneration());
     }
 
-    public void runLife(ActionEvent actionEvent) throws InterruptedException {
+    public synchronized void runLife(ActionEvent actionEvent) throws InterruptedException {
         if (toggleRun.isSelected()) {
-            for (int i = 0; i < 1000; i++) {
-
-            }
-
             System.out.println("pressed");
-        }
-        else System.out.println("not pressed");
+        } else System.out.println("not pressed");
     }
 
     public void startLife(ActionEvent actionEvent) throws InterruptedException {
-        runLife = true;
-        while (true){
-            gridDisplay.redrawGridDisplay(gameManager.bornNewGeneration());
-
-            System.out.println("next gen");
-            if (!runLife) break;
-        }
     }
+
 
     public void stopLife(ActionEvent actionEvent) {
         runLife = false;
+        gameThread = null;
     }
 
 //    private void initListeners(){
@@ -98,7 +95,6 @@ public class Controller {
 //            }
 //        });
 //    }
-
 
 
 }

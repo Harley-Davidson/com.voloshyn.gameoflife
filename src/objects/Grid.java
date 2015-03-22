@@ -58,16 +58,16 @@ public class Grid {
                 state = 1 + (int) (Math.random() * 3);
                 switch (state) {
                     case 1:
-                        grid[i][j].setState(Cell.State.DEAD);
-                        System.out.print(".");
+                        grid[i][j].setState(Cell.State.BLANK);
+//                        System.out.print(".");
                         break;
                     case 2:
                         grid[i][j].setState(Cell.State.DEAD);
-                        System.out.print("*");
+//                        System.out.print("*");
                         break;
                     case 3:
                         grid[i][j].setState(Cell.State.ALIVE);
-                        System.out.print("0");
+//                        System.out.print("0");
                         break;
                 }
             }

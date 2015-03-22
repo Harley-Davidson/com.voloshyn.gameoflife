@@ -5,34 +5,30 @@ import gui.controllers.Controller;
 /**
  * Created by Max on 20.03.2015.
  */
-public class GameManager {
+public class GridManager{
     private int gridX;
     private int gridY;
     private Grid currentGeneration;
     private Grid newGeneration;
     private int generationCounter;
 
-    public GameManager() {
+    public GridManager() {
         gridX = Controller.cols - 1;
         gridY = Controller.rows - 1;
         currentGeneration = new Grid(Controller.cols, Controller.rows);
-        fillShape();
+//        fillShape();
         newGeneration  = new Grid(Controller.cols, Controller.rows);
         generationCounter = 1;
-//        currentGeneration.randomlyFillGrid();
-        currentGeneration.printGrid();
+        currentGeneration.randomlyFillGrid();
+//        currentGeneration.printGrid();
     }
 
-
-
-
-
-    public Grid bornNewGeneration(){
+    public synchronized Grid bornNewGeneration() {
         newGeneration = new Grid(Controller.cols, Controller.rows);
         int amountOfAliveNeighbours;
         //calculation of surrounding dead/alive neighbours (not on the edge of the grid)
-        for (int j = 0; j < gridY; j++){
-            for (int i = 0; i < gridX; i++) {
+        for (int j = 0; j <= gridY; j++){
+            for (int i = 0; i <= gridX; i++) {
                 amountOfAliveNeighbours = amountOfAliveNeighbours(i, j);
                 if (currentGeneration.getCell(i, j).isAlive()) {
                     //under-population or overcrowding
@@ -56,7 +52,7 @@ public class GameManager {
         generationCounter++;
         currentGeneration = newGeneration;
 
-
+//        Thread.sleep(100);
         return currentGeneration;
     }
 
@@ -182,4 +178,12 @@ public class GameManager {
 //        currentGeneration.setCellStateInGrid(1, 2, Cell.State.ALIVE);
 //        currentGeneration.setCellStateInGrid(21, 17, Cell.State.ALIVE);
     }
+
+
+//    @Override
+//    public void run() {
+//        while (Controller.runLife){
+//            bornNewGeneration();
+//        }
+//    }
 }

@@ -12,11 +12,12 @@ import static javafx.scene.paint.Color.*;
  * Created by Max on 21.03.2015.
  */
 public class GridDisplay {
-    public static final double ELEMENT_SIZE = 15;
+    public static final double ELEMENT_SIZE = 10;
     public static final double GAP = ELEMENT_SIZE / 10;
     private int yLength;
     private int xLength;
     private Grid generation;
+    private Rectangle[][] rectangles;
 
 //    public GameManager gameManager = new GameManager();
 //    public Grid currentGeneration = gameManager.getCurrentGeneration();
@@ -36,34 +37,37 @@ public class GridDisplay {
         tilePane.setStyle("-fx-background-color: rgba(255, 215, 200, 0.1);");
         tilePane.setHgap(GAP);
         tilePane.setVgap(GAP);
-        setXLength(xLength);
-        setYLength(yLength);
+        tilePane.setPrefColumns(xLength);
+        tilePane.setPrefRows(yLength);
+        drawGridDisplay(generation);
         System.out.println("GridDisplay cols:" + xLength + "  GridDisplay rows:" + yLength);
     }
 
-    public void redrawGridDisplay(Grid generation){
+    public void drawGridDisplay(Grid generation){
         this.generation = generation;
-        setXLength(xLength);
-        setYLength(yLength);
+        createElements();
+        for (int j = 0; j < yLength; j++) {
+            for (int i = 0; i < xLength; i++) {
+                tilePane.getChildren().add(rectangles[i][j]);
+            }
+        }
     }
 
-    public void setXLength(int columns) {
-        xLength = columns;
-        tilePane.setPrefColumns(xLength);
-        createElements();
-    }
-
-    public void setYLength(int rows) {
-        yLength = rows;
-        tilePane.setPrefRows(yLength);
-        createElements();
+    public void reDrawGridDisplay(Grid generation){
+        this.generation = generation;
+        for (int j = 0; j < yLength; j++) {
+            for (int i = 0; i < xLength; i++) {
+                setRectangleColor(rectangles[i][j], generation.getCell(i, j).getState());
+            }
+        }
     }
 
     private void createElements() {
         tilePane.getChildren().clear();
+        rectangles = new Rectangle[xLength][yLength];
         for (int j = 0; j < yLength; j++) {
             for (int i = 0; i < xLength; i++) {
-                tilePane.getChildren().add(createElement(i, j));
+                rectangles[i][j] = createElement(i, j);
             }
         }
     }
@@ -71,7 +75,11 @@ public class GridDisplay {
     private Rectangle createElement(int x, int y) {
         Rectangle rectangle = new Rectangle(ELEMENT_SIZE, ELEMENT_SIZE);
         rectangle.setStroke(Color.GREY);
-        Cell.State state = generation.getCell(x, y).getState();
+        setRectangleColor(rectangle, generation.getCell(x, y).getState());
+        return rectangle;
+    }
+
+    private Rectangle setRectangleColor(Rectangle rectangle, Cell.State state){
         switch (state){
             case ALIVE:
                 rectangle.setFill(GREEN);
