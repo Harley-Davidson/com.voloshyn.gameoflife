@@ -13,18 +13,18 @@ public class GridManager{
     private int generationCounter;
 
     public GridManager() {
-        gridX = Controller.cols - 1;
-        gridY = Controller.rows - 1;
-        currentGeneration = new Grid(Controller.cols, Controller.rows);
+        gridX = Controller.xLength - 1;
+        gridY = Controller.yLength - 1;
+        currentGeneration = new Grid(Controller.xLength, Controller.yLength);
 //        fillShape();
-        newGeneration  = new Grid(Controller.cols, Controller.rows);
+        newGeneration  = new Grid(Controller.xLength, Controller.yLength);
         generationCounter = 1;
         currentGeneration.randomlyFillGrid();
 //        currentGeneration.printGrid();
     }
 
     public synchronized Grid bornNewGeneration() {
-        newGeneration = new Grid(Controller.cols, Controller.rows);
+        newGeneration = new Grid(Controller.xLength, Controller.yLength);
         int amountOfAliveNeighbours;
         //calculation of surrounding dead/alive neighbours (not on the edge of the grid)
         for (int j = 0; j <= gridY; j++){
@@ -148,7 +148,7 @@ public class GridManager{
         return gridY;
     }
 
-    public Grid getCurrentGeneration() {
+    public synchronized Grid getCurrentGeneration() {
         return currentGeneration;
     }
 
@@ -165,7 +165,7 @@ public class GridManager{
     }
 
     public void fillShape(){
-        currentGeneration = new Grid(Controller.cols, Controller.rows);
+        currentGeneration = new Grid(Controller.xLength, Controller.yLength);
         for (int i = 0; i <5; i++) {
             currentGeneration.setCellStateInGrid((gridX/2 - 2), (gridY/2 - 2 + i), Cell.State.ALIVE);
             currentGeneration.setCellStateInGrid((gridX/2 + 2), (gridY/2 - 2 + i), Cell.State.ALIVE);
