@@ -1,6 +1,7 @@
 package objects;
 
 import gui.controllers.Controller;
+import gui.controllers.DialogManager;
 
 /**
  * Created by Max on 20.03.2015.
@@ -13,18 +14,20 @@ public class GridManager{
     private int generationCounter;
 
     public GridManager() {
-        gridX = Controller.xLength - 1;
-        gridY = Controller.yLength - 1;
-        currentGeneration = new Grid(Controller.xLength, Controller.yLength);
-//        fillShape();
-        newGeneration  = new Grid(Controller.xLength, Controller.yLength);
+        gridX = Controller.cols - 1;
+        gridY = Controller.rows - 1;
+        currentGeneration = new Grid(Controller.cols, Controller.rows);
+        fillShape();
+        newGeneration = new Grid(Controller.cols, Controller.rows);
         generationCounter = 1;
         currentGeneration.randomlyFillGrid();
+        currentGeneration.clearGrid();
 //        currentGeneration.printGrid();
     }
 
-    public synchronized Grid bornNewGeneration() {
-        newGeneration = new Grid(Controller.xLength, Controller.yLength);
+
+    public Grid bornNewGeneration() {
+        newGeneration = new Grid(Controller.cols, Controller.rows);
         int amountOfAliveNeighbours;
         //calculation of surrounding dead/alive neighbours (not on the edge of the grid)
         for (int j = 0; j <= gridY; j++){
@@ -148,8 +151,12 @@ public class GridManager{
         return gridY;
     }
 
-    public synchronized Grid getCurrentGeneration() {
+    public Grid getCurrentGeneration() {
         return currentGeneration;
+    }
+
+    public void setCurrentGeneration(Grid currentGeneration) {
+        this.currentGeneration = currentGeneration;
     }
 
     public Grid getNewGeneration() {
@@ -160,12 +167,21 @@ public class GridManager{
         return generationCounter;
     }
 
-    public void setCurrentGeneration(Grid currentGeneration) {
-        this.currentGeneration = currentGeneration;
+    public void gameOver() {
+        int aliveCells = 0;
+        for (int j = 0; j < gridY; j++) {
+            for (int i = 0; i < gridX; i++) {
+                if (currentGeneration.getCell(i, j).isAlive()) aliveCells++;
+            }
+        }
+        if (aliveCells == 0) {
+            DialogManager.showInfoDialog("Game Over", "Congratulations, no one is alive here!");
+
+        }
     }
 
     public void fillShape(){
-        currentGeneration = new Grid(Controller.xLength, Controller.yLength);
+        currentGeneration = new Grid(Controller.cols, Controller.rows);
         for (int i = 0; i <5; i++) {
             currentGeneration.setCellStateInGrid((gridX/2 - 2), (gridY/2 - 2 + i), Cell.State.ALIVE);
             currentGeneration.setCellStateInGrid((gridX/2 + 2), (gridY/2 - 2 + i), Cell.State.ALIVE);

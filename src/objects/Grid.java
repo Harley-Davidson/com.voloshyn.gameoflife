@@ -15,9 +15,7 @@ public class Grid {
         for (int j = 0; j < gridY; j++) {
             for (int i = 0; i < gridX; i++) {
                 grid[i][j] = new Cell();
-//                System.out.print("*");
             }
-//            System.out.println();
         }
     }
 
@@ -51,7 +49,7 @@ public class Grid {
         }
     }
 
-    public Grid randomlyFillGrid() {
+    public void randomlyFillGrid() {
         int state;
         for (int j = 0; j < gridY; j++) {
             for (int i = 0; i < gridX; i++) {
@@ -59,46 +57,18 @@ public class Grid {
                 switch (state) {
                     case 1:
                         grid[i][j].setState(Cell.State.BLANK);
-//                        System.out.print(".");
                         break;
                     case 2:
                         grid[i][j].setState(Cell.State.DEAD);
-//                        System.out.print("*");
                         break;
                     case 3:
                         grid[i][j].setState(Cell.State.ALIVE);
-//                        System.out.print("0");
                         break;
                 }
             }
-            System.out.println();
         }
-        return null;
     }
 
-    public int getGridX() {
-        return gridX;
-    }
-
-    public void setGridX(int gridX) {
-        this.gridX = gridX;
-    }
-
-    public int getGridY() {
-        return gridY;
-    }
-
-    public void setGridY(int gridY) {
-        this.gridY = gridY;
-    }
-
-    public Cell[][] getGrid() {
-        return grid;
-    }
-
-    public void setGrid(Cell[][] grid) {
-        this.grid = grid;
-    }
 
     public Cell getCell(int x, int y) {
         return grid[x][y];
