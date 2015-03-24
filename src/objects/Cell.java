@@ -4,17 +4,9 @@ package objects;
  * Created by Max on 18.03.2015.
  */
 public class Cell {
-    public enum State{
-        ALIVE, DEAD, BLANK
-    }
     private State state;
-
     public Cell() {
         this.state = State.BLANK;
-    }
-
-    public Cell(State state) {
-        this.state = state;
     }
 
     public State getState() {
@@ -35,5 +27,9 @@ public class Cell {
 
     public boolean isBlank(){
         return state == State.BLANK;
+    }
+
+    public enum State {
+        ALIVE, DEAD, BLANK
     }
 }

@@ -17,14 +17,12 @@ public class GridManager{
         gridX = Controller.cols - 1;
         gridY = Controller.rows - 1;
         currentGeneration = new Grid(Controller.cols, Controller.rows);
-        fillShape();
         newGeneration = new Grid(Controller.cols, Controller.rows);
         generationCounter = 1;
         currentGeneration.randomlyFillGrid();
-        currentGeneration.clearGrid();
+//        currentGeneration.clearGrid();
 //        currentGeneration.printGrid();
     }
-
 
     public Grid bornNewGeneration() {
         newGeneration = new Grid(Controller.cols, Controller.rows);
@@ -100,55 +98,32 @@ public class GridManager{
 
         if (currentGeneration.getCell(leftX, topY).isAlive()) {
             amountOfAliveNeighbours++;
-//            System.out.print("   " + leftX + " " + topY + " is Alive  &");
         }
-//        else System.out.print("   " + leftX + " " + topY + " is Dead  &");
-
-        if (currentGeneration.getCell(leftX, centralY).isAlive()){ amountOfAliveNeighbours++;
-//        System.out.print("   " + leftX + " " + centralY + " is Alive  &");
-    }
-//    else System.out.print("   " + leftX + " " + centralY + " is Dead  &");
-
-        if (currentGeneration.getCell(leftX, bottomY).isAlive()) {amountOfAliveNeighbours++;
-//            System.out.println("   " + leftX + " " + bottomY + " is Alive  &");
+        if (currentGeneration.getCell(leftX, centralY).isAlive()) {
+            amountOfAliveNeighbours++;
         }
-//        else System.out.println("   " + leftX + " " + bottomY + " is Dead  &");
-
-        if (currentGeneration.getCell(centralX, topY).isAlive()){ amountOfAliveNeighbours++;
-//            System.out.print("   " + centralX + " " + topY + " is Alive  &");
+        if (currentGeneration.getCell(leftX, bottomY).isAlive()) {
+            amountOfAliveNeighbours++;
         }
-//        else System.out.print("   " + centralX + " " + topY + " is Dead  &");
-
-
-        if (currentGeneration.getCell(centralX, bottomY).isAlive()) {amountOfAliveNeighbours++;
-//            System.out.println("   " + centralX + " " + bottomY + " is Alive  &");
+        if (currentGeneration.getCell(centralX, topY).isAlive()) {
+            amountOfAliveNeighbours++;
         }
-//        else System.out.println("   " + centralX + " " + bottomY + " is Dead  &");
 
-        if (currentGeneration.getCell(rightX, topY).isAlive()){ amountOfAliveNeighbours++;
-//            System.out.print("   " + rightX + " " + topY + " is Alive  &");
+        if (currentGeneration.getCell(centralX, bottomY).isAlive()) {
+            amountOfAliveNeighbours++;
         }
-//        else System.out.print("   " + rightX + " " + topY + " is Dead  &");
+        if (currentGeneration.getCell(rightX, topY).isAlive()) {
+            amountOfAliveNeighbours++;
+        }
+        if (currentGeneration.getCell(rightX, centralY).isAlive()) {
+            amountOfAliveNeighbours++;
+        }
+        if (currentGeneration.getCell(rightX, bottomY).isAlive()) {
+            amountOfAliveNeighbours++;
+        }
 
-        if (currentGeneration.getCell(rightX, centralY).isAlive()) {amountOfAliveNeighbours++;
-//            System.out.print("   " + rightX + " " + centralY + " is Alive  &");
-        }
-//        else System.out.print("   " + rightX + " " + centralY + " is Dead  &");
-
-        if (currentGeneration.getCell(rightX, bottomY).isAlive()) {amountOfAliveNeighbours++;
-//            System.out.println("   " + rightX + " " + bottomY + " is Alive  &");
-        }
-//        else System.out.println("   " + rightX + " " + bottomY + " is Dead  &");
 
         return amountOfAliveNeighbours;
-    }
-
-    public int getGridX() {
-        return gridX;
-    }
-
-    public int getGridY() {
-        return gridY;
     }
 
     public Grid getCurrentGeneration() {
@@ -159,15 +134,8 @@ public class GridManager{
         this.currentGeneration = currentGeneration;
     }
 
-    public Grid getNewGeneration() {
-        return newGeneration;
-    }
 
-    public int getGenerationCounter() {
-        return generationCounter;
-    }
-
-    public void gameOver() {
+    public void checkIfGameOver() {
         int aliveCells = 0;
         for (int j = 0; j < gridY; j++) {
             for (int i = 0; i < gridX; i++) {
@@ -180,7 +148,7 @@ public class GridManager{
         }
     }
 
-    public void fillShape(){
+    public void fillPulsarShape() {
         currentGeneration = new Grid(Controller.cols, Controller.rows);
         for (int i = 0; i <5; i++) {
             currentGeneration.setCellStateInGrid((gridX/2 - 2), (gridY/2 - 2 + i), Cell.State.ALIVE);
@@ -188,18 +156,67 @@ public class GridManager{
         }
         currentGeneration.setCellStateInGrid((gridX/2), (gridY/2 - 2), Cell.State.ALIVE);
         currentGeneration.setCellStateInGrid((gridX/2), (gridY/2 + 2), Cell.State.ALIVE);
+    }
 
-//        currentGeneration.setCellStateInGrid(1, 0, Cell.State.ALIVE);
-//        currentGeneration.setCellStateInGrid(1, 1, Cell.State.ALIVE);
-//        currentGeneration.setCellStateInGrid(1, 2, Cell.State.ALIVE);
-//        currentGeneration.setCellStateInGrid(21, 17, Cell.State.ALIVE);
+    public void fill10CellShape() {
+        currentGeneration = new Grid(Controller.cols, Controller.rows);
+        for (int i = 0; i < 5; i++) {
+            currentGeneration.setCellStateInGrid((gridX / 2 - i), (gridY / 2), Cell.State.ALIVE);
+            currentGeneration.setCellStateInGrid((gridX / 2 + i), (gridY / 2), Cell.State.ALIVE);
+        }
+        currentGeneration.setCellStateInGrid((gridX / 2 + 5), (gridY / 2), Cell.State.ALIVE);
+    }
+
+    public void fill9CellShape() {
+        currentGeneration = new Grid(Controller.cols, Controller.rows);
+        for (int i = 0; i < 5; i++) {
+            currentGeneration.setCellStateInGrid((gridX / 2 - i), (gridY / 2), Cell.State.ALIVE);
+            currentGeneration.setCellStateInGrid((gridX / 2 + i), (gridY / 2), Cell.State.ALIVE);
+        }
+    }
+
+    public void fillGliderShape() {
+        currentGeneration = new Grid(Controller.cols, Controller.rows);
+        currentGeneration.setCellStateInGrid((gridX / 2 + 1), (gridY / 2), Cell.State.ALIVE);
+        currentGeneration.setCellStateInGrid((gridX / 2 - 1), (gridY / 2 - 1), Cell.State.ALIVE);
+        currentGeneration.setCellStateInGrid((gridX / 2), (gridY / 2 - 1), Cell.State.ALIVE);
+        currentGeneration.setCellStateInGrid((gridX / 2 + 1), (gridY / 2 - 1), Cell.State.ALIVE);
+        currentGeneration.setCellStateInGrid((gridX / 2), (gridY / 2 + 1), Cell.State.ALIVE);
+    }
+
+    public void fillLineShape() {
+        currentGeneration = new Grid(Controller.cols, Controller.rows);
+        for (int i = 0; i < 19; i++) {
+            currentGeneration.setCellStateInGrid((gridX / 2 - i), (gridY / 2), Cell.State.ALIVE);
+            currentGeneration.setCellStateInGrid((gridX / 2 + i), (gridY / 2), Cell.State.ALIVE);
+        }
+        currentGeneration.setCellStateInGrid((gridX / 2 - 2), (gridY / 2), Cell.State.BLANK);
+        currentGeneration.setCellStateInGrid((gridX / 2 - 3), (gridY / 2), Cell.State.BLANK);
+        currentGeneration.setCellStateInGrid((gridX / 2 - 4), (gridY / 2), Cell.State.BLANK);
+        currentGeneration.setCellStateInGrid((gridX / 2 - 10), (gridY / 2), Cell.State.BLANK);
+        currentGeneration.setCellStateInGrid((gridX / 2 + 15), (gridY / 2), Cell.State.BLANK);
+        for (int i = 0; i < 6; i++) {
+            currentGeneration.setCellStateInGrid((gridX / 2 + 2 + i), (gridY / 2), Cell.State.BLANK);
+        }
+    }
+
+    public void fillLightWeightSpaceShipShape() {
+        currentGeneration = new Grid(Controller.cols, Controller.rows);
+        for (int i = 0; i < 3; i++) {
+            currentGeneration.setCellStateInGrid((gridX / 2 - 2), (gridY / 2 - 1 + i), Cell.State.ALIVE);
+            currentGeneration.setCellStateInGrid((gridX / 2 - 1 + i), (gridY / 2 - 1), Cell.State.ALIVE);
+        }
+        currentGeneration.setCellStateInGrid((gridX / 2 - 1), (gridY / 2 + 2), Cell.State.ALIVE);
+        currentGeneration.setCellStateInGrid((gridX / 2 + 2), (gridY / 2), Cell.State.ALIVE);
+        currentGeneration.setCellStateInGrid((gridX / 2 + 2), (gridY / 2 + 2), Cell.State.ALIVE);
     }
 
 
-//    @Override
-//    public void run() {
-//        while (Controller.runLife){
-//            bornNewGeneration();
-//        }
-//    }
+    public int getGenerationCounter() {
+        return generationCounter;
+    }
+
+    public void setGenerationCounter(int generationCounter) {
+        this.generationCounter = generationCounter;
+    }
 }

@@ -8,17 +8,17 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("../gui/fxml/main.fxml"));
-        primaryStage.setTitle("Hello World");
-        Scene scene = new Scene(root, 800, 600);
+        primaryStage.setTitle("Game Of Life: Mindalley edition");
+        Scene scene = new Scene(root, 1205, 800);
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
